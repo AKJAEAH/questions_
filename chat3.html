@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Soru ve Cevap Oyunu</title>
+    <style>
+        body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #2c3e50;
+      margin: 0;
+      padding: 0;
+      color: #ecf0f1;
+    }
+    #container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #34495e;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      color: #ecf0f1;
+    }
+    #soru {
+      font-size: 24px;
+      margin: 20px 0;
+    }
+    #cevap {
+      padding: 10px;
+      width: 100%;
+      font-size: 18px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    #sonuc {
+      font-size: 20px;
+      margin-top: 10px;
+      color: #3498db;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    </style>
+</head>
+<body>
+    <h1>Soru ve Cevap Oyunu</h1>
+    <p id="question"></p>
+    <input type="text" id="answer">
+    <button onclick="checkAnswer()">Cevapla</button>
+    <p id="result"></p>
+    <p id="scoreDisplay"></p>
+
+    <form id="scoreForm" action="https://formspree.io/f/xrgwlzeq" method="POST">
+        <!-- Kullanıcı adını ve cevapları almak için gerekli alanlar -->
+        <input type="text" name="name" id="username" value="Isminizi buraya girin">
+        <input type="hidden" name="score" id="scoreField">
+    </form>
+
+    <script>
+        var questions = [
+        {
+                question: "Dunyanin en yuksek dagi hangisidir?",
+                answer: "Everest"
+            },
+            {
+                question: "Istanbul'un sembolu olan bazin adi nedir?",
+                answer: "Bogazici"
+            },
+            {
+                question: "Insan vucudunda kac tane kalp bulunur?",
+                answer: "1"
+            },
+            {
+                question: "En cok satan video oyun serisi hangisidir?",
+                answer: "Minecraft"
+            },
+            {
+                question: "Yer cekimi kuvvetini bulan unlu bilim insani kimdir?",
+                answer: "Newton"
+            },
+            {
+                question: "Kahramanlarinin isimlerini kullanarak hangi film serisi anlatilir? (Ornek: Tony Stark - Iron Man)",
+                answer: "Marvel"
+            },
+            {
+                question: "Logosunda elma bulunan unlu teknoloji sirketi hangisidir?",
+                answer: "Apple"
+            },
+            {
+                question: "Gunes sistemindeki en buyuk gezegen hangisidir?",
+                answer: "Jupiter"
+            },
+            {
+                question: "Mona Lisa tablosu hangi unlu sanatciya aittir?",
+                answer: "Leonardo da Vinci"
+            },
+            {
+                question: "Turkiye'nin baskenti hangi sehirdir?",
+                answer: "Ankara"
+            },
+            {
+                question: "Matematikte 3.14159 derine yakin olarak kullanilan sayi hangisidir?",
+                answer: "Pi"
+            },
+            {
+                question: "Hangi gezegenin uydusu Ay'dir?",
+                answer: "Dunya"
+            },
+            {
+                question: "En buyuk materik hangisi?",
+                answer: "Avrasiya"
+            },
+            {
+                question: "Hangi ulke Eiffel Kulesi'ne ev sahipli yapmaktadir?",
+                answer: "Fransa"
+            },
+            {
+                question: "Kral Arthur'un efsanevi kilicinin adi nedir?",
+                answer: "Excalibur"
+            },
+            {
+                question: "Dunya uzerindeki en buyuk deniz hangisidir?",
+                answer: "Pasifik"
+            },
+            {
+                question: "Cin takvimine gore 2022 yilinda hangi hayvanin yili olacak?",
+                answer: "Tavsan"
+            },
+            {
+                question: "Hangi gezegen en sicak olan gezegendir?",
+                answer: "Venera"
+            },
+            {
+                question: "Hangi ulke piramitleriyle unludur?",
+                answer: "Misir"
+            },
+            {
+                question: "Hangi sehir Amerika Birlesik Devletleri'nin baskentidir?",
+                answer: "Washington"
+            }
+];
+
+var currentQuestion = 0;
+var correctAnswers = 0;
+
+function loadQuestion() {
+    var questionElement = document.getElementById("question");
+    questionElement.innerText = questions[currentQuestion].question;
+}
+
+function checkAnswer() {
+    var userAnswer = document.getElementById("answer").value;
+    var resultElement = document.getElementById("result");
+    var scoreDisplayElement = document.getElementById("scoreDisplay");
+
+    if (userAnswer.toLowerCase() === questions[currentQuestion].answer.toLowerCase()) {
+        resultElement.innerText = "Tebrikler! Doğru cevap.";
+        correctAnswers++;
+    } else {
+        resultElement.innerText = "Maalesef, yanlış cevap.";
+    }
+
+    currentQuestion++;
+    if (currentQuestion < questions.length) {
+        loadQuestion();
+    } else {
+        resultElement.innerText += " Oyun bitti!";
+        document.getElementById("answer").disabled = true;
+        scoreDisplayElement.innerText = "Doğru cevapladığınız soru sayısı: " + correctAnswers + "/" + questions.length;
+        sendScoreToFormspree(correctAnswers);
+    }
+}
+
+loadQuestion();
+
+function sendScoreToFormspree(score) {
+    document.getElementById("scoreField").value = score;
+    document.getElementById("scoreForm").submit();
+}
+
+    </script>
+</body>
+</html>
